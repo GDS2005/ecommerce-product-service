@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../../middlewares/multer');
 const imageController = require('../../image/image.controller')
 const productController = require('../../product/product.controller');
+const upload = require('../../middlewares/multer')
 
 router
   .route('/')
@@ -17,11 +17,12 @@ router
 
 
 router
-  .route('/images')
+  .route('/files')
   .post(upload.single('image'), imageController.createImage);
 
+// Route for getting images
 router
-  .route('/images/:filename')
+  .route('/files/:filename')
   .get(imageController.getImages);
 
 module.exports = router;

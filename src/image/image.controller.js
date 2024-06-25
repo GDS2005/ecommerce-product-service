@@ -1,25 +1,53 @@
-const express = require('express');
-const catchAsync = require('../utils/catchAsync');
 const path = require('path');
 const fs = require('fs');
+const catchAsync = require('../utils/catchAsync')
 
-const createImage = catchAsync(async (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
-    }
-  
-    return res.status(200).json({ message: 'File uploaded successfully', filename: req.file.filename });
+exports.createImage = (req, res) => {
+  if (!req.file) {
+    return res.status(400).send({ message: 'Please upload an image.' });
+  }
+  res.status(201).send({ message: 'Image uploaded successfully.' });
+};
+/*
+exports.getImages = (req, res) => {
+  const filename = req.params.filename;
+  const filepath = path.join(__dirname, '../uploads', filename);
+
+  if (fs.existsSync(filepath)) {
+  res.sendFile(filepath);
+  } else {
+    res.status(404).send({ message: 'Image not found.' });
+  }
+};
+*/
+exports.getImages = catchAsync(async (req, res) => {
+  const filename = req.params['filename'] || '';
+  // Construct the path to the image file
+  const imagePath = path.join(__dirname, '../../uploads', filename);
+
+  res.sendFile(imagePath);
 });
 
-const getImages = catchAsync(async (req, res) => {
-    const filename = req.params.filename || '';
-    // Construct the path to the image file
-    const imagePath = path.join(__dirname, '../../uploads', filename);
+exports.deleteImage = (filename, callback) => {
+  const imagePath = path.join(__dirname, '../../uploads', filename);
 
-    res.sendFile(imagePath);
-});
-
-module.exports = {
-    createImage,
-    getImages,
+  // Check if the file exists
+  fs.access(imagePath, fs.constants.F_OK, (err) => {
+      if (err) {
+          // If the file doesn't exist, invoke the callback with an error
+          console.log(imagePath);
+          callback(new Error("File not found"));
+      } else {
+          // Delete the file
+          fs.unlink(imagePath, (err) => {
+              if (err) {
+                  // If an error occurs while deleting the file, invoke the callback with the error
+                  callback(err);
+              } else {
+                  // If the file is deleted successfully, invoke the callback with no error
+                  callback(null);
+              }
+          });
+      }
+  });
 };

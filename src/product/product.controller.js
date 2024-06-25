@@ -1,6 +1,6 @@
 const Product = require('../product/product.model');
 const productValidation = require('../product/product.validation');
-const Joi = require('joi');
+const imageController = require('../image/image.controller')
 
 exports.createProduct = async (req, res) => {
     try {
@@ -10,13 +10,13 @@ exports.createProduct = async (req, res) => {
             return res.status(400).json({ error: error.details[0].message });
         }
 
-        const { name, description, image, price } = value;
+        const { name, description, image, price, stock } = value;
 
         // Your existing code for creating a product
         let product = await Product.findOne({ name });
         if (product) return res.status(400).json({ msg: 'Product already exists' });
 
-        product = new Product({ name, description, image, price });
+        product = new Product({ name, description, image, price, stock });
 
         await product.save();
 
@@ -30,8 +30,8 @@ exports.createProduct = async (req, res) => {
 exports.getProducts = async (req, res) => {
     try {
         // No request validation needed for this function as it doesn't accept any input
-        const products = await Product.find();
-        res.json(products);
+        const results = await Product.find();
+        res.json({results});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -41,9 +41,9 @@ exports.getProducts = async (req, res) => {
 exports.getProduct = async (req, res) => {
     // Similar to getProducts, no request validation needed for this function
     try {
-        const product = await Product.findById(req.params.id);
-        if (!product) return res.status(404).json({ msg: 'Product not found' });
-        res.json(product);
+        const results = await Product.findById(req.params.id);
+        if (!results) return res.status(404).json({ msg: 'Product not found' });
+        res.json({results});
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');
@@ -60,7 +60,7 @@ exports.updateProduct = async (req, res) => {
             return res.status(400).json({ error: error.details[0].message });
         }
 
-        const { name, description, image, price } = value;
+        const { name, description, image, price, stock } = value;
 
         let product = await Product.findById(id);
         if (!product) return res.status(404).json({ msg: 'Product not found' });
@@ -70,6 +70,7 @@ exports.updateProduct = async (req, res) => {
         if (description) product.description = description;
         if (image) product.image = image;
         if (price) product.price = price;
+        if (stock) product.stock = stock;
 
         await product.save();
         res.json(product);
@@ -84,6 +85,14 @@ exports.deleteProduct = async (req, res) => {
         // No request validation needed for this function
         const product = await Product.findById(req.params.id);
         if (!product) return res.status(404).json({ msg: 'Product not found' });
+
+        imageController.deleteImage(product.image, (error) => {
+            if (error) {
+                console.error("Error deleting image:", error);
+            } else {
+                console.log("Image deleted successfully");
+            }
+        });
 
         await Product.deleteOne({ _id: req.params.id });
         res.json({ msg: 'Product removed' });

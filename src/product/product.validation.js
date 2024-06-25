@@ -5,6 +5,7 @@ const createProductBody = {
   description: Joi.string().required(),
   image: Joi.string().required(),
   price: Joi.number().required(),
+  stock: Joi.number().required(),
 };
 
 const createProduct = {
