@@ -8,28 +8,17 @@ exports.createImage = (req, res) => {
   }
   res.status(201).send({ message: 'Image uploaded successfully.' });
 };
-/*
-exports.getImages = (req, res) => {
-  const filename = req.params.filename;
-  const filepath = path.join(__dirname, '../uploads', filename);
 
-  if (fs.existsSync(filepath)) {
-  res.sendFile(filepath);
-  } else {
-    res.status(404).send({ message: 'Image not found.' });
-  }
-};
-*/
 exports.getImages = catchAsync(async (req, res) => {
   const filename = req.params['filename'] || '';
   // Construct the path to the image file
-  const imagePath = path.join(__dirname, '../../uploads', filename);
+  const imagePath = path.join(__dirname, '../uploads', filename);
 
   res.sendFile(imagePath);
 });
 
 exports.deleteImage = (filename, callback) => {
-  const imagePath = path.join(__dirname, '../../uploads', filename);
+  const imagePath = path.join(__dirname, '../uploads', filename);
 
   // Check if the file exists
   fs.access(imagePath, fs.constants.F_OK, (err) => {

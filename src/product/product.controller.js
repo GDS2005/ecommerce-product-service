@@ -10,13 +10,13 @@ exports.createProduct = async (req, res) => {
             return res.status(400).json({ error: error.details[0].message });
         }
 
-        const { name, description, image, price, stock } = value;
+        const { name, description, image, price, stock, user } = value;
 
         // Your existing code for creating a product
         let product = await Product.findOne({ name });
         if (product) return res.status(400).json({ msg: 'Product already exists' });
 
-        product = new Product({ name, description, image, price, stock });
+        product = new Product({ name, description, image, price, stock, user });
 
         await product.save();
 
@@ -43,7 +43,7 @@ exports.getProduct = async (req, res) => {
     try {
         const results = await Product.findById(req.params.id);
         if (!results) return res.status(404).json({ msg: 'Product not found' });
-        res.json({results});
+        res.json(results);
     } catch (err) {
         console.error(err.message);
         res.status(500).send('Server error');

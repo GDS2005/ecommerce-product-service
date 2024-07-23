@@ -5,6 +5,7 @@ const createProductBody = {
   description: Joi.string().required(),
   image: Joi.string().required(),
   price: Joi.number().required(),
+  user: Joi.string().required(),
   stock: Joi.number().required(),
 };
 
@@ -31,6 +32,8 @@ const updateProduct = {
       name: Joi.string(),
       description: Joi.string(),
       image: Joi.string(),
+      user: Joi.string(),
+      stock: Joi.number(),
       price: Joi.number(),
     })
     .min(1),
