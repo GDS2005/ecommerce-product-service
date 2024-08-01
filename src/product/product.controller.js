@@ -64,7 +64,7 @@ exports.updateProduct = async (req, res) => {
         if (description) product.description = description;
         if (image) product.image = image;
         if (price) product.price = price;
-        if (stock) product.stock = stock;
+        if (stock !== undefined) product.stock = stock;
 
         await product.save();
         res.json(product);
