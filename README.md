@@ -1,11 +1,10 @@
-# User API REST
+# Product API REST
 
-A simple RESTful API for managing users, built with Node.js, Express, and MongoDB.
+A simple RESTful API for managing products, built with Node.js, Express, and MongoDB.
 
 ## Features
 
-- User authentication using JWT
-- Create, retrieve, update, and delete tasks
+- Create, retrieve, update, and delete products
 - Input validation with Joi
 - Security enhancements with Helmet
 - Cross-Origin Resource Sharing (CORS) enabled
@@ -14,7 +13,7 @@ A simple RESTful API for managing users, built with Node.js, Express, and MongoD
 
 - Node.js
 - MongoDB
-- Docker (optional, for containerization)
+- Docker
 
 ## Installation
 
@@ -32,7 +31,7 @@ A simple RESTful API for managing users, built with Node.js, Express, and MongoD
 
 3. **Set up environment variables**:
 
-    Create a `.env` file in the root directory and add the content of .env.example. Modify has you need
+    Create a `.env` file in the root directory and add the content of .env.example. Modify has you need.
 
 
 
@@ -53,33 +52,34 @@ To run the application using Docker, follow these steps:
 1. **Build the Docker image**:
 
     ```bash
-    docker build -t node-rest-user .
+    docker build -t node-rest-product .
     ```
 
 2. **Run the Docker container**:
 
     ```bash
-    docker run -d -p {{PORT}}:{{PORT}} --name node-rest-user-container --env-file .env node-rest-user
+    docker run -d -p {{PORT}}:{{PORT}} --name node-rest-product-container --env-file .env node-rest-product
     ```
 
-3. **Access the API**:
+3. **Use the API**:
 
-    Open your browser and navigate to `http://localhost:{{PORT}}`.
+    Use POST, GET, PATCH and DELETE in `http://localhost:{{PORT}}/v1/` .
 
 ## API Endpoints
 
-### Authentication
+### Products
 
-- **Login**: `POST /api/login`
-- **Register**: `POST /api/register`
+- **Create Product**: `POST /v1/`
+- **Get All Products**: `GET /v1/`
+- **Get Product by ID**: `GET /v1/:id`
+- **Update Product**: `PUT /v1/:id`
+- **Delete Product**: `DELETE /v1/:id`
 
-### Tasks
+### Images
 
-- **Create Task**: `POST /api/tasks`
-- **Get All Tasks**: `GET /api/tasks`
-- **Get Task by ID**: `GET /api/tasks/:id`
-- **Update Task**: `PUT /api/tasks/:id`
-- **Delete Task**: `DELETE /api/tasks/:id`
+ Use POST, GET, PATCH and DELETE in `http://localhost:{{PORT}}/v1/files/:filename` .
 
-## Project Structure
+- **Add Image**: `POST /v1/files/`
+- **Get Image by Name**: `GET /v1/files/:filename`
+
 

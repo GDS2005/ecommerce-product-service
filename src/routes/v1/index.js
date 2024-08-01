@@ -20,7 +20,6 @@ router
   .route('/files')
   .post(upload.single('image'), imageController.createImage);
 
-// Route for getting images
 router
   .route('/files/:filename')
   .get(imageController.getImages);
