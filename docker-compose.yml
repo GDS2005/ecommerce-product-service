@@ -5,7 +5,7 @@ networks:
 
 services:
   app:
-    container_name: rest-product
+    container_name: product-service
     build: 
       context: .
       dockerfile: Dockerfile
@@ -17,9 +17,7 @@ services:
       - ${PORT}:${PORT}
     environment: 
       - MONGODB_URL=mongodb://mongo:27017/productdb
-      - CLIENT_URL=${CLIENT_URL}
-    links: 
-      - mongo  
+      - CLIENT_URL=${CLIENT_URL} 
     depends_on:
       - mongo
     networks:
